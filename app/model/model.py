@@ -14,15 +14,16 @@ from torch_geometric.loader import DataLoader
 from torch_geometric.nn import GATConv, global_mean_pool
 from torch_geometric.datasets import QM9
 from torch_geometric.transforms import Compose, NormalizeFeatures
-from app.model.utils import load_from_file, sample
+from model.utils import load_from_file, sample
 import torch
 import torch.nn.functional as F
 from rdkit import Chem
 from rdkit.Chem.rdmolops import GetAdjacencyMatrix
 from rdkit.Chem import Draw
+import os 
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent
-
+script_dir = os.path.dirname(__file__)
 
 
 
@@ -49,26 +50,29 @@ class GAT(torch.nn.Module):
 num_node_features = 11  # Number of features per node in the QM9 dataset
 model = GAT(num_node_features)
 
+model = model.to('cpu')
+
 #with open (f"{BASE_DIR}/mymodel.pth","rb") as f:
-model.load_state_dict(torch.load(r'C:\Users\yasmine\Desktop\my models\app\model\model_state.pth'))
+model.load_state_dict(torch.load(os.path.join(BASE_DIR, 'model_state.pth')))
 model.eval()
 
 model2=  GAT(num_node_features)
-model2.load_state_dict(torch.load(r'C:\Users\yasmine\Desktop\my models\app\model\model_state_homo.pth'))
+model2.load_state_dict(torch.load(os.path.join(BASE_DIR, 'model_state_homo.pth')))
 model2.eval()
 
-pretrained_rnn_model = load_from_file(r'C:\Users\yasmine\Desktop\my models\app\model\pretrained.rnn.pth')
+model_path = os.path.join(BASE_DIR, 'pretrained.rnn.pth')
+pretrained_rnn_model = load_from_file(model_path)
 
 model3=  GAT(num_node_features)
-model3.load_state_dict(torch.load(r'C:\Users\yasmine\Desktop\my models\app\model\model_state_dipolemoment.pth'))
+model3.load_state_dict(torch.load(os.path.join(BASE_DIR, 'model_state_dipolemoment.pth')))
 model3.eval()
 
 model4=  GAT(num_node_features)
-model4.load_state_dict(torch.load(r'C:\Users\yasmine\Desktop\my models\app\model\model_state_lumo.pth'))
+model4.load_state_dict(torch.load(os.path.join(BASE_DIR, 'model_state_lumo.pth')))
 model4.eval()
 
 model5=  GAT(num_node_features)
-model5.load_state_dict(torch.load(r'C:\Users\yasmine\Desktop\my models\app\model\model_state_zpve.pth'))
+model5.load_state_dict(torch.load(os.path.join(BASE_DIR, 'model_state_zpve.pth')))
 model5.eval()
 
 

@@ -6,8 +6,8 @@ from fastapi import FastAPI, HTTPException, Response
 from fastapi.responses import JSONResponse
 from matplotlib.pyplot import draw
 from pydantic import BaseModel
-from app.model.model import predict_dipolemoment, predict_gap, predict_homo, generate_molecules, predict_lumo, predict_zpve, smilesToMol, visualize_molecules
-import py3Dmol
+from model.model import predict_dipolemoment, predict_gap, predict_homo, generate_molecules, predict_lumo, predict_zpve, smilesToMol, visualize_molecules
+
 #from app.model.model import model
 from fastapi.middleware.cors import CORSMiddleware
 import torch
@@ -21,6 +21,7 @@ origins =[
     "http://localhost:3000",
     "http://127.0.0.1",
     "http://127.0.0.1:3000",
+    "https://ai-mol.vercel.app/"
 
 ]
 

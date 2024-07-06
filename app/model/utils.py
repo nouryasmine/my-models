@@ -1,6 +1,10 @@
 import torch
-from smiles_lstm.model.smiles_vocabulary import SMILESTokenizer
-from smiles_lstm.model.smiles_lstm import SmilesLSTM
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+from .smiles_lstm.model.smiles_vocabulary import SMILESTokenizer
+from .smiles_lstm.model.smiles_lstm import SmilesLSTM
+
 
 def load_from_file(file_path : str, sampling_mode : bool=False):
     """
@@ -13,7 +17,8 @@ def load_from_file(file_path : str, sampling_mode : bool=False):
         SmilesLSTM : New instance of the RNN, or an exception if it was not
                      possible to load it.
     """
-    model = torch.load(file_path, map_location='cpu')
+    model = torch.load(file_path, map_location=torch.device('cpu'))
+  
     if sampling_mode:
         model.network.eval()
 
@@ -32,8 +37,7 @@ def sample(batch_size=1, model=None):
                                                    dtype=torch.long,
                                                    device='cpu')
     ]
-    # NOTE: The first token never gets added in the loop so
-    # the sequences are initialized with a start token
+    
     hidden_state = None
     nlls = torch.zeros(batch_size)
     for _ in range(256 - 1):
